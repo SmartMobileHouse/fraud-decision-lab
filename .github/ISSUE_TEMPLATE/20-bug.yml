@@ -1,0 +1,78 @@
+name: Bug report
+description: Something behaves differently from what the documentation, the methodology, or common sense says.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Writing rules:** short, plain sentences. Explain every project word on first use, or add it to **Words used**. Keep **Tracking** up to date in the issue body while the bug is worked on.
+
+        **Size rule:** a bug fix holds at most 3 pull requests. If the fix grows past that, open a **Tracking issue**, link both ways, and record the conversion in the Decision log.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you saw, where, and when. Include exact error text if it is short.
+      placeholder: "On 2026-11-10, `fraudlab run --dataset configs/datasets/ulb.yaml` showed … after …"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What should happen instead
+      description: If the README, CLAUDE.md or the methodology docs define the correct behaviour, name the file and section (for example "DATA_LICENSES.md, IEEE-CIS").
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to see it
+      description: The smallest set of steps that shows the bug. Number them.
+      placeholder: |
+        1. …
+        2. …
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Logs, the run ID, `make check` output, screenshots, dates, affected files. Enough for someone else to chase it without you. Never paste API keys or dataset rows.
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact
+      options:
+        - Blocks work, gives wrong benchmark numbers, or leaks data or secrets
+        - Wrong but there is a workaround
+        - Cosmetic or minor
+    validations:
+      required: true
+  - type: textarea
+    id: words-used
+    attributes:
+      label: Words used
+      description: One plain-English line for every project word or codename this issue uses. Delete the section if there are none.
+  - type: textarea
+    id: tracking
+    attributes:
+      label: Tracking
+      value: |
+        **Status:** Not started
+        <!-- One of: Not started | In progress | In review | Blocked (say on what) | Done -->
+
+        **Root cause** (fill in once found, in plain words)
+        - …
+
+        **Pull requests**
+        - [ ] 1 — `fix/slug` — one line on what it delivers
+
+        **Progress log** (one line per working session, newest last)
+        - YYYY-MM-DD — …
+
+        **Decision log** (add a row the day a decision is made; never rewrite old rows)
+
+        | Date | Decision | Why |
+        |------|----------|-----|
+    validations:
+      required: true

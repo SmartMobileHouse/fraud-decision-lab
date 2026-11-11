@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }}</title>
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex, follow">
+<style>
+  /* Neutral, unbranded theme. */
+  :root {
+    --bg: #FFFFFF; --bg-warm: #F5F6F8; --surface: #FFFFFF; --paper: #F5F6F8;
+    --ink: #1A1D21; --ink-soft: #2E3338; --muted: #5C636B;
+    --accent: #2F6FB3; --accent-ink: #1F4E80; --accent-soft: #E8F0F9; --accent-light: #9DBDE0;
+    --rule: #DDE1E6; --border: #D3D8DE;
+    --clay: #B5482B; --clay-soft: #FBE9E4; --clay-ink: #7A2E19; --indigo: #2F6FB3;
+    --good: #1F4E80; --good-bg: #E8F0F9; --bad: #7A2E19; --bad-bg: #FBE9E4; --neutral-bg: #EEF0F3;
+    --chart-text: #2E3338; --chart-grid: #E3E6EA;
+  }
+  :root[data-theme="dark"] {
+    --bg: #15181C; --bg-warm: #1C2025; --surface: #1C2025; --paper: #22272D;
+    --ink: #EEF1F4; --ink-soft: #D5DAE0; --muted: #A3ABB4;
+    --accent: #7FB0E6; --accent-ink: #9CC3EE; --accent-soft: rgba(127,176,230,.14); --accent-light: #7FB0E6;
+    --rule: #2E343B; --border: #353C44;
+    --clay: #E39A85; --clay-soft: rgba(181,72,43,.2); --clay-ink: #F0B8A8;
+    --good: #9CC3EE; --good-bg: rgba(127,176,230,.14); --bad: #F0B8A8; --bad-bg: rgba(181,72,43,.2); --neutral-bg: rgba(238,241,244,.06);
+    --chart-text: #D5DAE0; --chart-grid: #2E343B;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --bg: #15181C; --bg-warm: #1C2025; --surface: #1C2025; --paper: #22272D;
+    --ink: #EEF1F4; --ink-soft: #D5DAE0; --muted: #A3ABB4;
+    --accent: #7FB0E6; --accent-ink: #9CC3EE; --accent-soft: rgba(127,176,230,.14); --accent-light: #7FB0E6;
+    --rule: #2E343B; --border: #353C44;
+    --clay: #E39A85; --clay-soft: rgba(181,72,43,.2); --clay-ink: #F0B8A8;
+    --good: #9CC3EE; --good-bg: rgba(127,176,230,.14); --bad: #F0B8A8; --bad-bg: rgba(181,72,43,.2); --neutral-bg: rgba(238,241,244,.06);
+    --chart-text: #D5DAE0; --chart-grid: #2E343B;
+  } }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body { font: 17px/1.65 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+         -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-underline-offset: 3px; }
+  a:hover { opacity: .8; }
+  .mono, code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+  @media (max-width: 640px) { .wrap { padding: 0 20px; } body { font-size: 16px; } }
+
+  /* Header */
+  .site-header { border-bottom: 1px solid var(--rule); background: var(--bg); position: sticky; top: 0; z-index: 10; }
+  .site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 16px; }
+  .site-header .wrap { justify-content: flex-start; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); }
+  .brand-name { font-weight: 700; letter-spacing: -0.02em; font-size: 17px; }
+  .chip { font-size: 11.5px; color: var(--muted); border: 1px solid var(--border); border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
+  .section-nav { display: flex; gap: 22px; margin-left: auto; font-size: 14.5px; font-weight: 500; }
+  .section-nav a { text-decoration: none; color: var(--muted); }
+  .section-nav a:hover { color: var(--ink); opacity: 1; }
+  .theme-toggle { margin-left: 18px; width: 38px; height: 38px; display: grid; place-items: center; color: var(--ink);
+    background: transparent; border: 1px solid var(--border); border-radius: 50%; cursor: pointer; padding: 0; }
+  .theme-toggle:hover { background: var(--accent-soft); }
+  .theme-toggle svg { width: 18px; height: 18px; }
+  .theme-toggle .icon-sun { display: none; }
+  .is-dark .theme-toggle .icon-sun { display: block; } .is-dark .theme-toggle .icon-moon { display: none; }
+  section[id] { scroll-margin-top: 80px; }
+  @media (max-width: 860px) { .section-nav { display: none; } .theme-toggle { margin-left: auto; } }
+  @media (max-width: 520px) { .chip { display: none; } }
+
+  /* Type */
+  .eyebrow { display: flex; align-items: center; gap: 8px; margin: 0 0 14px; font-size: 12px; font-weight: 600;
+             letter-spacing: .14em; text-transform: uppercase; color: var(--accent-ink); }
+  .eyebrow::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  h1 { font-size: clamp(34px, 5.2vw, 56px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 600; margin: 0 0 18px; }
+  h2 { font-size: clamp(26px, 3.6vw, 36px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 600; margin: 0 0 10px; }
+  h3 { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 8px; }
+  .lead { font-size: clamp(18px, 1.5vw, 20px); line-height: 1.6; color: var(--muted); max-width: 42rem; margin: 0; }
+  .muted { color: var(--muted); } .small { font-size: 14px; } .xs { font-size: 12.5px; }
+
+  /* Layout */
+  .hero { padding-top: 72px; padding-bottom: 40px; }  /* keep the .wrap side gutters */
+  .intro { padding-bottom: 56px; }  /* keeps the guide card clear of the first section's top line */
+  section { padding: 56px 0; border-top: 1px solid var(--rule); }
+  .section-head { margin-bottom: 28px; }
+  .meta { font-size: 13px; color: var(--muted); margin-top: 10px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+
+  /* Stats row (as on the website) */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--border); border-radius: 16px;
+           overflow: hidden; background: var(--surface); margin: 8px 0 28px; }
+  .stat { padding: 22px 24px; border-right: 1px solid var(--border); }
+  .stat:last-child { border-right: 0; }
+  .stat .v { font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
+  .stat .v small { color: var(--accent); font-size: 18px; }
+  .stat .l { margin-top: 6px; font: 500 11px/1.3 ui-monospace, monospace; letter-spacing: .08em;
+             text-transform: uppercase; color: var(--muted); }
+  @media (max-width: 760px) { .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(2) { border-right: 0; } .stat:nth-child(-n+2) { border-bottom: 1px solid var(--border); } }
+
+  /* Cards */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px 22px; }
+  .card.paper { background: var(--paper); }
+  .card.accent { background: var(--accent-soft); border-color: transparent; }
+  .card h3 { margin-bottom: 6px; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  th, td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  td.num, td.nowrap { white-space: nowrap; }
+  table.results th, table.speed th { white-space: nowrap; }
+  table.results td.model, table.speed td.model { white-space: nowrap; }
+  table.speed th.group { text-align: center; border-bottom: 1px solid var(--rule); }
+  .findings-wrap { padding-bottom: 20px; }
+  .findings { border-left: 4px solid var(--accent); }
+  .findings .eyebrow { margin-bottom: 8px; }
+  .findings ul { margin: 0; padding-left: 20px; } .findings li { margin: 6px 0; } .findings li::marker { color: var(--accent); }
+  td .sub { display: block; margin-top: 2px; }
+  @media (max-width: 1200px) { table { font-size: 13.5px; } th, td { padding: 9px 8px; } th { letter-spacing: .03em; } }
+  /* Tablets and phones: every table row becomes a small card of "label: value" lines (labels added by the script below). */
+  @media (max-width: 980px) {
+    .table-wrap { border: 0; background: transparent; overflow: visible; }
+    table, tbody, tr, td { display: block; width: 100%; }
+    thead { display: none; }
+    tr { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; padding: 6px 4px; }
+    td, td.num { display: block; text-align: right; border-bottom: 1px solid var(--rule); white-space: normal;
+                 padding: 7px 10px; overflow-wrap: anywhere; }
+    tr td:last-child { border-bottom: 0; }
+    td::before { content: attr(data-label); float: left; margin-right: 16px; color: var(--muted); text-align: left;
+                 font: 500 11px/1.9 ui-monospace, monospace; letter-spacing: .05em; text-transform: uppercase; }
+    td.model { font-size: 15px; text-align: left; } td.model::before { content: none; }
+    td.raw { text-align: left; } td.raw::before { float: none; display: block; }
+    td .sub { display: inline; margin: 0 0 0 6px; }
+  }
+  tr:last-child td { border-bottom: 0; }
+  th { font: 500 11px/1.35 ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase;
+       color: var(--muted); background: var(--bg-warm); vertical-align: bottom; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.model { font-weight: 600; }
+  .range { color: var(--muted); font-size: 13px; }
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; }
+  .pill.good { background: var(--good-bg); color: var(--good); }
+  .pill.bad { background: var(--bad-bg); color: var(--bad); }
+  .pill.neutral { background: var(--neutral-bg); color: var(--muted); }
+  .pill.ref { background: var(--neutral-bg); color: var(--ink-soft); }
+  .status-ok { color: var(--accent-ink); font-weight: 600; }
+  .status-other { color: var(--clay); font-weight: 600; }
+  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
+
+  /* Charts */
+  .chart { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 8px; margin: 20px 0; }
+  .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 900px) { .charts { grid-template-columns: 1fr; } }
+
+  /* Examples: one per row; fields on the left, answers on the right (stacked on small screens) */
+  .example { margin-bottom: 24px; padding: 24px; }
+  .example:last-of-type { margin-bottom: 0; }  /* no extra strip above the next section's divider */
+  section > .wrap > :last-child { margin-bottom: 0; }
+  .example-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding-bottom: 16px;
+                  margin-bottom: 18px; border-bottom: 1px solid var(--rule); }
+  .example-head h3 { margin: 0; font-size: 16px; }
+  .example-body { display: grid; grid-template-columns: minmax(260px, 1fr) minmax(0, 1.6fr); gap: 28px; align-items: start; }
+  @media (max-width: 1100px) { .example-body { grid-template-columns: 1fr; } }
+  .label { margin: 0 0 10px; font: 500 11px/1.3 ui-monospace, monospace; letter-spacing: .08em;
+           text-transform: uppercase; color: var(--muted); }
+  dl.fields { display: grid; grid-template-columns: max-content 1fr; margin: 0; border: 1px solid var(--rule);
+              border-radius: 12px; overflow: hidden; font-size: 14px; }
+  dl.fields dt, dl.fields dd { margin: 0; padding: 7px 12px; border-bottom: 1px solid var(--rule); }
+  dl.fields dt { color: var(--muted); background: var(--bg-warm); }
+  dl.fields dd { font-size: 13px; overflow-wrap: anywhere; }
+  dl.fields dt:last-of-type, dl.fields dd:last-of-type { border-bottom: 0; }
+  pre.json { margin: 0; padding: 16px 18px; font-size: 13.5px; line-height: 1.6; white-space: pre; overflow-x: auto;
+             background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; color: var(--ink-soft); }
+  .j-k { color: var(--indigo); }            /* keys */
+  .j-s { color: #2C7A6F; }                  /* strings: the website's teal button colour (AA) */
+  :root[data-theme="dark"] .j-s { color: #A8C2BF; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .j-s { color: #A8C2BF; } }
+  .j-d { color: var(--clay); }              /* numbers */
+  .j-b { color: #8A5A96; font-weight: 500; } /* true / false */
+  .j-n { color: var(--muted); font-style: italic; } /* null */
+  :root[data-theme="dark"] .j-k { color: #A9B2E6; } :root[data-theme="dark"] .j-b { color: #C9A2D4; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .j-k { color: #A9B2E6; }
+    :root:not([data-theme="light"]) .j-b { color: #C9A2D4; } }
+  table.answers td { white-space: normal; }
+  table.answers td.model { white-space: nowrap; }
+  table.answers td.score { white-space: nowrap; width: 170px; }
+  table.answers td.raw { font-size: 12.5px; color: var(--ink-soft); overflow-wrap: anywhere; }
+  .bar { display: inline-block; width: 70px; height: 8px; border-radius: 4px; background: var(--rule);
+         vertical-align: middle; margin-right: 8px; overflow: hidden; }
+  .bar span { display: block; height: 100%; border-radius: 4px; }
+  /* Shared */
+  .tag { font: 500 11px/1 ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase;
+         padding: 5px 9px; border-radius: 6px; margin-left: 8px; }
+  .tag.fraud { background: var(--clay-soft); color: var(--clay-ink); }
+  .tag.legit { background: var(--accent-soft); color: var(--accent-ink); }
+
+  ul.limits { padding-left: 20px; margin: 0; } ul.limits li { margin: 10px 0; }
+  ul.limits li::marker { color: var(--accent); }
+
+  /* Footer */
+  .site-footer { margin-top: 48px; padding: 24px 0 32px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 13.5px; }
+  .footer-plain { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+  .site-footer a { color: var(--accent-ink); }
+  .nowrap { white-space: nowrap; }
+
+  /* Print: always light, no interactive controls */
+  @media print {
+    :root, :root[data-theme="dark"] { --bg: #FFFFFF; --bg-warm: #F3F2ED; --surface: #FFFFFF; --paper: #F5F3EE; --ink: #171717;
+      --ink-soft: #2E3338; --muted: #5C636B; --rule: #DDE1E6; --border: #D3D8DE; --accent: #2F6FB3; --accent-ink: #1F4E80; }
+    .theme-toggle, .section-nav { display: none; } .site-header { position: static; }
+    section { break-inside: avoid-page; }
+  }
+</style>
+<script>
+  // Theme: follow the system unless the reader chose one (remembered in this browser only).
+  (function () {
+    try { var t = localStorage.getItem("fdl-theme"); if (t) document.documentElement.setAttribute("data-theme", t); } catch (e) {}
+  })();
+</script>
+<script>{{ plotly_js | safe }}</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <span class="brand"><span class="brand-name">Fraud Decision Lab</span></span>
+    <span class="chip mono" title="Software version and report build date">v{{ version }} · built {{ release_date }}</span>
+    <nav class="section-nav" aria-label="Sections">
+      <a href="#results">Results</a>{% if loadtest %}<a href="#speed">Speed</a>{% endif %}{% if examples %}<a href="#examples">Examples</a>{% endif %}<a href="#limitations">Limitations</a>
+    </nav>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch theme">
+      <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2.2M12 19.8V22M2 12h2.2M19.8 12H22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+<div class="wrap hero">
+  <p class="eyebrow">Benchmark results</p>
+  <h1>Which model puts the most fraud at the top of the review queue?</h1>
+  <p class="lead">If analysts can review only the top 1% or 5% of transactions, how much real fraud does each model put there —
+    and at what speed and cost? Models use the same feature schema and scored population.
+    XGBoost learns from labelled history at original numeric precision; the AI decision models
+    answer each case cold using fields rounded to four decimals and provider-specific request formats.</p>
+  <p class="meta mono">fraudlab v{{ version }} · generated {{ generated }}</p>
+</div>
+
+{% if findings %}
+<div class="wrap findings-wrap">
+  <div class="card findings">
+    <p class="eyebrow">Key findings</p>
+    <ul>{% for f in findings %}<li>{{ f }}</li>{% endfor %}</ul>
+  </div>
+</div>
+{% endif %}
+<div class="wrap intro">
+  <div class="card accent small">
+    <h3>How to read this</h3>
+    <b>PR-AUC</b> — non-interpolated average precision (higher is better; random ≈ the fraud rate).
+    <b>Caught @1% / @5%</b> — share of all fraud found when reviewing only the top 1% / 5% of transactions.
+    <b>Precision @1%</b> — share of those reviewed transactions that are fraud.
+    <b>Cost / 1k</b> — accounted API cost per 1,000 transactions, calculated from usage and recorded prices,
+    with unknown-cost reservations identified separately; not verified billed charges.
+    XGBoost and rules run locally, with no API fee; local compute and training costs are not priced.
+    <b>vs XGBoost</b> — difference in PR-AUC with its 95% confidence range:
+    <span class="pill good">better</span> <span class="pill bad">worse</span> <span class="pill neutral">no clear difference</span>.
+    Failed final answers rank last and lower eventual coverage. Prior failed attempts remain part of operational accounting.
+  </div>
+</div>
+
+<div id="results"></div>
+{% for s in sections %}
+<section id="{{ s.anchor }}">
+<div class="wrap">
+  <div class="section-head">
+    <p class="eyebrow">Dataset {{ loop.index }} of {{ sections | length }}</p>
+    <h2>{{ s.title }}</h2>
+    {% if s.tests %}<p class="lead">{{ s.tests }}</p>{% endif %}
+    <p class="meta mono">dataset {{ s.name }} · run {{ s.run_id }} · {{ s.created }}</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="v">{{ "{:,}".format(s.scored) }}</div><div class="l">Transactions scored</div></div>
+    <div class="stat"><div class="v">{{ "{:,}".format(s.frauds) }}</div><div class="l">Fraud cases</div></div>
+    <div class="stat"><div class="v">{{ "%.2f" | format(s.fraud_rate * 100) }}<small>%</small></div><div class="l">Fraud rate</div></div>
+    <div class="stat"><div class="v">{{ "Allowed" if s.external else "Blocked" }}</div><div class="l">Sent to AI providers</div></div>
+  </div>
+
+  {% set ncols = 8 + (2 if s.show_status else 0) %}
+  <div class="table-wrap" data-shot="results-{{ s.name }}"><table class="results">
+  <thead><tr>
+    <th>Model</th>{% if s.show_status %}<th>Status</th><th class="num">Coverage</th>{% endif %}
+    <th class="num">PR-AUC</th><th class="num">Caught @1%</th><th class="num">Caught @5%</th>
+    <th class="num">Precision @1%</th><th>vs XGBoost</th><th class="num">Cost / 1k</th>
+  </tr></thead>
+  <tbody>
+  {% for m in s.models %}
+  <tr>
+    <td class="model"><span class="dot" style="background: {{ m.color }}"></span>{{ m.label }}</td>
+    {% if m.status == "ok" %}
+    {% if s.show_status %}<td class="status-ok nowrap">ok</td><td class="num">{{ m.coverage | pct }}</td>{% endif %}
+    <td class="num">{{ m.pr_auc | num }}<span class="range sub">{{ m.pr_lo | num }}–{{ m.pr_hi | num }}</span></td>
+    <td class="num">{{ m.rec1 | pct }}</td><td class="num">{{ m.rec5 | pct }}</td><td class="num">{{ m.prec1 | pct }}</td>
+    <td class="nowrap">
+      {% if m.verdict == "reference" %}<span class="pill ref">reference</span>
+      {% elif m.diff %}<span class="pill {{ 'bad' if m.verdict.startswith('worse') else ('good' if m.verdict.startswith('better') else 'neutral') }}"
+        title="PR-AUC difference vs XGBoost, 95% range: {{ m.diff.low | signed }} to {{ m.diff.high | signed }}">{{ "worse" if m.verdict.startswith("worse") else ("better" if m.verdict.startswith("better") else "no clear difference") }}</span>
+        <span class="range sub">PR-AUC {{ m.diff.low | signed }} to {{ m.diff.high | signed }}</span>
+      {% endif %}
+    </td>
+    <td class="num">{% if m.local %}<span class="muted">local, no API cost</span>{% else %}{{ "$%.4f" | format(m.cost1k) }}{% endif %}</td>
+    {% else %}
+    <td colspan="{{ ncols - 1 }}" class="muted small"><span class="status-other">{{ m.status }}</span>{% if m.coverage > 0 %} · coverage {{ m.coverage | pct }}{% endif %} — {{ m.reason }}</td>
+    {% endif %}
+  </tr>
+  {% endfor %}
+  </tbody></table></div>
+
+  <div class="charts">
+    <div class="chart" data-shot="budget-{{ s.name }}">{{ s.budget_chart | safe }}</div>
+    <div class="chart">{{ s.pr_chart | safe }}</div>
+  </div>
+  <p class="muted small">The review-budget curve uses the same seeded tie order as the metrics.
+    The precision–recall plot is a downsampled interpolated precision envelope; its plotted area is not the reported AP.</p>
+
+  <h3 style="margin-top:32px">Cost comparison</h3>
+  <p class="muted small">Accounted API cost for this dataset: <b>${{ "%.4f" | format(s.total_cost) }}</b>:
+    ${{ "%.4f" | format(s.known_cost) }} calculated from recorded usage plus
+    ${{ "%.4f" | format(s.estimated_cost) }} in unknown-cost reservations.
+    These are not verified charges. Prices: dated snapshot recorded in the run manifest.
+    {% if s.cost_incomplete %}<b>Historical cost evidence is incomplete; some retry charges or earlier attempts cannot be reconstructed.</b>{% endif %}</p>
+  <div class="charts" data-shot="cost-{{ s.name }}">
+    <div class="chart">{{ s.cost_chart | safe }}</div>
+    <div class="table-wrap" style="align-self:start"><table>
+      <thead><tr><th>Model</th><th class="num">Known + estimated</th><th class="num">Cost / 1k</th><th class="num">Per fraud @1%</th></tr></thead>
+      <tbody>
+      {% for m in s.models if m.status == "ok" or m.cost or m.unknown_cost_calls %}
+        <tr><td class="model"><span class="dot" style="background: {{ m.color }}"></span>{{ m.label }}</td>
+          {% if m.local %}<td colspan="3" class="num muted">local, no API cost</td>
+          {% else %}<td class="num">{{ "$%.4f" | format(m.known_cost) }} + {{ "$%.4f" | format(m.estimated_cost) }}
+            {% if m.cost_incomplete %}<span class="range sub">incomplete evidence</span>{% endif %}</td><td class="num">{{ "$%.4f" | format(m.cost1k) }}</td>
+          <td class="num">{{ "$%.4f" | format(m.cost_per_fraud) if m.cost_per_fraud is not none else "—" }}</td>{% endif %}</tr>
+      {% endfor %}
+      </tbody></table></div>
+  </div>
+
+  {% if s.operational_available %}
+  <h3>Attempts and completion</h3>
+  <p class="muted small">First-pass coverage counts cases answered by their first logged provider evaluation;
+    that evaluation may itself include HTTP retries. Eventual coverage includes successful resumed evaluations.
+    Latency below includes every finished logged evaluation, including failures and retry waits; gaps between sessions are excluded.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Model</th><th class="num">First pass</th><th class="num">Eventual</th>
+      <th class="num">Evaluations</th><th class="num">HTTP attempts</th><th class="num">All outcomes p95 ms</th><th>Outcomes</th></tr></thead>
+    <tbody>{% for m in s.models if m.operational and not m.local %}
+      <tr><td class="model">{{ m.label }}</td><td class="num">{{ m.operational.first_pass_coverage | pct }}</td>
+        <td class="num">{{ m.operational.eventual_coverage | pct }}</td><td class="num">{{ m.operational.calls }}</td>
+        <td class="num">{{ m.operational.http_attempts }}{% if not m.operational.http_attempts_complete %} (partial evidence){% endif %}</td>
+        <td class="num">{{ m.operational.latency_all_ms.p95_ms | num(0) }}</td>
+        <td class="mono xs">{{ m.operational.statuses | tojson }}</td></tr>
+    {% endfor %}</tbody></table></div>
+  {% endif %}
+
+  <div class="grid small">
+    <div class="card paper"><h3>Data</h3>{{ s.license }}<br>
+      <span class="muted">Split: {{ s.split_method }}-based
+      {% if s.split_fractions %}{{ "%g/%g/%g" | format(s.split_fractions.train * 100, s.split_fractions.validation * 100, s.split_fractions.holdout * 100) }}{% endif %}
+      — train {{ "{:,}".format(s.parts.train.rows) }}
+      ({{ s.parts.train.fraud_rate | pct(2) }} fraud), validation {{ "{:,}".format(s.parts.validation.rows) }},
+      holdout {{ "{:,}".format(s.parts.holdout.rows) }}.</span></div>
+    <div class="card paper"><h3>Fields every model saw ({{ s.features | length }})</h3>
+      <span class="muted mono xs">{{ s.features[:20] | join(", ") }}{% if s.features | length > 20 %} …{% endif %}</span></div>
+    <div class="card paper"><h3>Versions</h3>
+      <span class="muted mono xs">eval {{ s.versions.eval }} · rules {{ s.versions.rules }} · xgb {{ s.versions.xgb }} ·
+      input {{ s.versions.render }} · question {{ s.question }} · xgboost {{ s.versions.xgboost }}</span></div>
+  </div>
+</div>
+</section>
+{% endfor %}
+
+{% if loadtest %}
+<section id="speed">
+<div class="wrap">
+  <div class="section-head">
+    <p class="eyebrow">Speed under steady load</p>
+    <h2>How fast does each model answer at {{ loadtest.rates_text }} requests per second?</h2>
+    <p class="lead">Synthetic transactions sent on a fixed schedule ({{ loadtest.seconds | int }} s per rate), without waiting for
+      answers and without retries.</p>
+    <p class="meta mono">run {{ loadtest.id }} · accounted cost ${{ "%.4f" | format(loadtest.spent) }} (not verified charges)</p>
+    {% if loadtest.aggregate_only %}<p class="muted small"><b>Aggregate-only historical evidence.</b>
+      Per-call records are unavailable, so these latency and throughput measurements cannot be independently recalculated.</p>{% endif %}
+  </div>
+  <div class="chart" data-shot="loadtest">{{ loadtest.chart | safe }}</div>
+  <div class="table-wrap"><table class="speed">
+  <thead>
+    <tr><th rowspan="2">Model</th>{% for r in loadtest.rates %}<th colspan="2" class="num group">{{ "%g" | format(r) }} / s</th>{% endfor %}
+      <th rowspan="2" class="num">Too busy</th><th rowspan="2" class="num">Errors</th></tr>
+    <tr>{% for r in loadtest.rates %}<th class="num">p50</th><th class="num">p95</th>{% endfor %}</tr>
+  </thead>
+  <tbody>
+  {% for row in loadtest.rows %}
+  <tr><td class="model"><span class="dot" style="background: {{ row.color }}"></span>{{ row.label }}</td>
+    {% for r in loadtest.rates %}
+    <td class="num">{{ "%.0f" | format(row.p50[r]) if row.p50.get(r) is not none else "—" }}</td>
+    <td class="num">{{ "%.0f" | format(row.p95[r]) if row.p95.get(r) is not none else "—" }}</td>
+    {% endfor %}
+    <td class="num">{{ row.too_busy }}</td><td class="num">{{ row.errors }}</td></tr>
+  {% endfor %}
+  </tbody></table></div>
+  <p class="muted xs" style="margin-top:10px">Times in milliseconds; {{ "{:,}".format(loadtest.rows | sum(attribute="sent")) }} requests in total.</p>
+</div>
+</section>
+{% endif %}
+
+{% if examples %}
+<section id="examples">
+<div class="wrap">
+  <div class="section-head">
+    <p class="eyebrow">Example cases</p>
+    <h2>What each model said about the same transaction</h2>
+    <p class="lead">Fictional transactions from the bundled synthetic dataset, with every model's score and its original answer.
+      The scenario name is hidden from all models.</p>
+  </div>
+  {% for e in examples %}
+  <article class="card example"{% if loop.first %} data-shot="example"{% endif %}>
+    <header class="example-head">
+      <h3 class="mono">{{ e.case_id }}</h3>
+      <span class="tag {{ 'fraud' if e.label == 'fraud' else 'legit' }}">actually {{ e.label }}</span>
+      <span class="muted xs">scenario: {{ e.scenario }} (hidden from models)</span>
+    </header>
+    <div class="example-body">
+      <div>
+        <p class="label">Rendered provider fields</p>
+        <pre class="json">{{ e.fields | json_html }}</pre>
+        <p class="muted xs" style="margin-top:12px">Rules that fired: {{ e.rules_fired | join(", ") if e.rules_fired else "none" }}</p>
+      </div>
+      <div>
+        <p class="label">What each model said</p>
+        <div class="table-wrap"><table class="answers">
+          <thead><tr><th>Model</th><th>Fraud score</th><th>Original answer</th></tr></thead>
+          <tbody>{% for a in e.answers %}
+            <tr>
+              <td class="model"><span class="dot" style="background: {{ a.color }}"></span>{{ a.model }}</td>
+              <td class="score">
+                {% if a.score is not none %}
+                <span class="bar"><span style="width: {{ (a.score * 100) | round(1) }}%; background: {{ a.color }}"></span></span>
+                <span class="mono">{{ a.score | num }}</span>
+                {% else %}<span class="status-other">{{ a.status }}</span>{% endif %}
+              </td>
+              <td class="raw mono">{{ a.raw or "" }}</td>
+            </tr>
+          {% endfor %}</tbody></table></div>
+      </div>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+</section>
+{% endif %}
+
+<section id="limitations">
+<div class="wrap">
+  <div class="section-head">
+    <p class="eyebrow">Limitations</p>
+    <h2>Read this before quoting any number</h2>
+  </div>
+  <ul class="limits">
+    <li><b>Zero-shot vs supervised.</b> XGBoost learned from labelled history; the AI models saw each transaction cold. This is deliberate.</li>
+    <li><b>Synthetic data</b> has meaningful fields but <i>simulated</i> fraud labels. It shows behaviour, not real-world accuracy.</li>
+    <li><b>ULB</b> has anonymised numerical fields with limited semantic context and few fraud cases.
+      Repeated feature vectors can cross time splits; identical vectors do not by themselves prove duplicate transactions.</li>
+    {% if has_restricted %}<li><b>IEEE-CIS</b> is configured for local processing only. Publication approval is a separate rights decision.</li>{% endif %}
+    <li><b>A fraud score is not a decision</b> to block a card, and not a calibrated probability.</li>
+    <li><b>Confidence ranges</b> condition on the saved predictions and a class-stratified resampling of single transactions.
+      They ignore links between transactions of the same customer or day, training and provider rerun variability, and future periods.</li>
+    <li><b>Manipulated inputs and distribution shift</b> are not validated here. Transaction text can influence model scores;
+      this experiment does not establish adversarial robustness, regulatory compliance, or production suitability.</li>
+    <li><b>Providers change.</b> Models, prices and APIs move. Every number here is tied to its run ID, date and versions.</li>
+    <li>Independent project, not affiliated with or endorsed by TypeSafe, OpenAI, Cloudflare, Kaggle, Worldline or ULB{% if has_restricted %}, or the IEEE-CIS sponsors{% endif %}.
+      ULB data: Worldline and the Machine Learning Group of ULB (cite Dal Pozzolo et al., IEEE CIDM 2015).</li>
+  </ul>
+</div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-plain">
+    <span>Generated by <a href="{{ links.github }}">fraud-decision-lab</a> v{{ version }} (MIT) · {{ generated }}</span>
+    <span><code>fraudlab replay --run-id &lt;id&gt;</code> checks supported saved-run metrics when prediction artifacts are available.
+      It does not verify invoices, provider execution, or missing historical load-test calls.</span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement, button = document.getElementById("theme-toggle");
+    function isDark() {
+      var t = root.getAttribute("data-theme");
+      return t ? t === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+    function paintCharts() {
+      var css = getComputedStyle(root), text = css.getPropertyValue("--chart-text").trim(),
+          grid = css.getPropertyValue("--chart-grid").trim();
+      document.querySelectorAll(".js-plotly-plot").forEach(function (el) {
+        Plotly.relayout(el, { "font.color": text, "title.font.color": text, "legend.font.color": text,
+          "xaxis.gridcolor": grid, "yaxis.gridcolor": grid, "xaxis.zerolinecolor": grid, "yaxis.zerolinecolor": grid,
+          "xaxis.linecolor": grid, "yaxis.linecolor": grid });
+      });
+      root.classList.toggle("is-dark", isDark());
+      button.setAttribute("aria-label", isDark() ? "Switch to light theme" : "Switch to dark theme");
+    }
+    button.addEventListener("click", function () {
+      var next = isDark() ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("fdl-theme", next); } catch (e) {}
+      paintCharts();
+    });
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", paintCharts);
+    window.addEventListener("load", paintCharts);
+    // Phone layout: copy each column header onto its cells, so stacked rows keep their labels.
+    document.querySelectorAll("table").forEach(function (table) {
+      var heads = Array.prototype.map.call(table.querySelectorAll("thead th"), function (th) { return th.innerText.trim(); });
+      table.querySelectorAll("tbody tr").forEach(function (tr) {
+        var col = 0;
+        Array.prototype.forEach.call(tr.children, function (td) {
+          if (heads[col]) td.setAttribute("data-label", heads[col]);
+          col += td.colSpan || 1;
+        });
+      });
+    });
+  })();
+</script>
+</body>
+</html>

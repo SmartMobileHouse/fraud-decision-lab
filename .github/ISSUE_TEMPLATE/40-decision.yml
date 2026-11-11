@@ -1,0 +1,70 @@
+name: Decision needed
+description: Ask the owner to choose between options. One question per issue.
+labels: ["decision"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Writing rules:** short, plain sentences. The owner must be able to decide from this issue alone, without reading code or chat history. Explain every project word on first use.
+  - type: input
+    id: owning-issue
+    attributes:
+      label: Owning issue
+      description: The issue whose Decision log the answer will be copied into.
+      placeholder: "#12"
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: The question
+      description: One sentence, answerable by picking an option below.
+      placeholder: "Should failed provider calls count as the lowest score, or be excluded from the metrics?"
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Why this needs a decision now
+      description: What is blocked, and what happens if no one decides.
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Options
+      description: Two or more. For each, say in plain words what it means for users and what it costs or risks.
+      value: |
+        **Option A — …**
+        - What it means: …
+        - Cost / risk: …
+
+        **Option B — …**
+        - What it means: …
+        - Cost / risk: …
+    validations:
+      required: true
+  - type: textarea
+    id: recommendation
+    attributes:
+      label: Recommendation
+      description: Which option, and why, in two or three sentences.
+    validations:
+      required: true
+  - type: input
+    id: decide-by
+    attributes:
+      label: Decide by
+      description: A date, and what is waiting on it.
+      placeholder: "2026-12-01 — PR 3 of #12 cannot start without it"
+  - type: textarea
+    id: decision
+    attributes:
+      label: Decision (filled in by the owner)
+      description: Leave as is when opening. When decided, record it here, copy one row into the Decision log of the owning issue, and close this issue.
+      value: |
+        | Date | Decision | Why |
+        |------|----------|-----|
+        | _pending_ | | |
+    validations:
+      required: true

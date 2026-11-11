@@ -1,0 +1,17 @@
+# IEEE-CIS, ALL columns: for the stronger 'XGBoost-full' reference only (more information than the AI models get).
+# LOCAL ONLY: competition rule 7B forbids sending this data to any third party.
+# The AI providers are always blocked on this dataset; only XGBoost and rules run.
+dataset:
+  name: ieee-cis-full
+  path: data/external/ieee-cis/train_transaction.csv
+  join: {path: data/external/ieee-cis/train_identity.csv, key: TransactionID}   # left join: keeps all transactions
+  label_column: isFraud
+  id_column: TransactionID
+  time_column: TransactionDT        # seconds from an undisclosed start date
+  features: all_except_label_id_time   # all 431 features, incl. masked C/D/M/V features
+  external_processing_allowed: false   # never change: Kaggle rule 7B
+  publication_allowed: false
+  publication_note: "All IEEE-CIS-derived public artifacts, including aggregate results, require legal review."
+  license_note: "Kaggle IEEE-CIS competition rules: non-commercial use only (7A); no transmission to third parties (7B)."
+split: {train: 0.70, validation: 0.15, holdout: 0.15, seed: 42}
+holdout_sample: 10000               # fixed seeded sample of the holdout

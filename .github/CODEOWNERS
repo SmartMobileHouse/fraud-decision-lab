@@ -1,0 +1,6 @@
+# CODEOWNERS — review-request routing for fraud-decision-lab.
+# Reference: https://docs.github.com/en/repositories/managing-your-repositories-settings-and-customization/customizing-your-repository/about-code-owners
+#
+# Owner: @jpietruszewski (single maintainer for now).
+
+*    @jpietruszewski

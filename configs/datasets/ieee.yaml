@@ -1,0 +1,40 @@
+# IEEE-CIS Fraud Detection (Kaggle competition data). See DATA_LICENSES.md.
+# LOCAL ONLY: competition rule 7B forbids sending this data to any third party.
+# The AI providers are always blocked on this dataset; only XGBoost and rules run.
+dataset:
+  name: ieee-cis
+  path: data/external/ieee-cis/train_transaction.csv
+  join: {path: data/external/ieee-cis/train_identity.csv, key: TransactionID}   # left join: keeps all transactions
+  label_column: isFraud
+  id_column: TransactionID
+  time_column: TransactionDT        # seconds from an undisclosed start date
+  features:                         # readable fields only (the masked C/D/M/V columns are in ieee-full.yaml)
+    - TransactionAmt
+    - ProductCD
+    - card4
+    - card6
+    - P_emaildomain
+    - R_emaildomain
+    - dist1
+    - DeviceType
+    - DeviceInfo
+    - id_30
+    - id_31
+  feature_descriptions:
+    TransactionAmt: "Transaction amount in USD"
+    ProductCD: "Product code (W, C, R, H, S; meaning not disclosed)"
+    card4: "Card network (visa, mastercard, american express, discover)"
+    card6: "Card type (debit, credit)"
+    P_emaildomain: "Purchaser email domain"
+    R_emaildomain: "Recipient email domain"
+    dist1: "A distance measure (meaning not disclosed)"
+    DeviceType: "desktop or mobile"
+    DeviceInfo: "Device model or OS build string"
+    id_30: "Operating system"
+    id_31: "Browser"
+  external_processing_allowed: false   # never change: Kaggle rule 7B
+  publication_allowed: false
+  publication_note: "All IEEE-CIS-derived public artifacts, including aggregate results, require legal review."
+  license_note: "Kaggle IEEE-CIS competition rules: non-commercial use only (7A); no transmission to third parties (7B)."
+split: {train: 0.70, validation: 0.15, holdout: 0.15, seed: 42}
+holdout_sample: 10000               # fixed seeded sample of the holdout

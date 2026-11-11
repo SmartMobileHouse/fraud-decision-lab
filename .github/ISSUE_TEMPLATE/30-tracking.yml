@@ -1,0 +1,83 @@
+name: Tracking issue
+description: Work that needs more than 3 pull requests. The single place to see goal, plan, decisions, and progress.
+labels: ["tracking"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Writing rules:** short, plain sentences. Explain every project word on first use, or add it to **Words used**.
+
+        **Rules for tracking issues:**
+        - Keep the PR plan to about **10 pull requests**. If it grows past that, split the extra work into child tracking issues and link them.
+        - Child pull requests reference this issue with `Addresses #N` or `Tracked in #N`, **never** `Closes #N`. `Closes` makes GitHub close this issue when the first PR merges.
+        - Update the **Progress log** and tick PR boxes the day something merges. Add **Decision log** rows the day a decision is made.
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: One short paragraph. What exists when this issue closes that does not exist today, and who it helps.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: In scope / out of scope
+      description: Being explicit here is what keeps the issue from growing.
+      value: |
+        **In scope**
+        - …
+
+        **Out of scope** (and where it lives instead, if anywhere)
+        - …
+    validations:
+      required: true
+  - type: textarea
+    id: done-means
+    attributes:
+      label: Done means
+      description: Observable outcomes someone can check, not a restatement of the PR list.
+      value: |
+        - [ ] …
+    validations:
+      required: true
+  - type: textarea
+    id: decisions-needed
+    attributes:
+      label: Open questions for the owner
+      description: Each question on one line, with the options in plain words. Tick it when answered and copy the answer into the Decision log. Use the "Decision needed" form for a big one.
+      value: |
+        - [ ] …
+  - type: textarea
+    id: pr-plan
+    attributes:
+      label: PR plan
+      description: One line per pull request. Name the branch, what it delivers, and what it depends on. Tick on merge and add the PR number.
+      value: |
+        - [ ] 1 — `type/slug` — one line on what it delivers
+        - [ ] 2 — `type/slug` — … (needs 1)
+    validations:
+      required: true
+  - type: textarea
+    id: words-used
+    attributes:
+      label: Words used
+      description: One plain-English line for every project word, codename, or abbreviation this issue uses.
+      placeholder: |
+        - **holdout** — the part of a dataset that is scored once at the end and never used for training or tuning.
+  - type: textarea
+    id: tracking
+    attributes:
+      label: Tracking
+      value: |
+        **Status:** Not started
+        <!-- One of: Not started | In progress | In review | Blocked (say on what) | Done -->
+
+        **Progress log** (one line per working session, newest last)
+        - YYYY-MM-DD — issue opened.
+
+        **Decision log** (every change of plan or direction gets a row the same day; never rewrite old rows)
+
+        | Date | Decision | Why |
+        |------|----------|-----|
+    validations:
+      required: true

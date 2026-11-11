@@ -1,0 +1,18 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+data/external/
+data/processed/
+outputs/
+private/
+.DS_Store
+
+# Planning documents are kept outside the repo
+IMPLEMENTATION_PLAN*.md
+PLAN_REVIEW*.md
+
+# Private Claude Code notes (point to the private plan)
+CLAUDE.local.md

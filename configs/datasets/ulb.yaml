@@ -1,0 +1,44 @@
+# ULB / Worldline credit-card fraud (Kaggle: mlg-ulb/creditcardfraud). See DATA_LICENSES.md.
+dataset:
+  name: ulb-creditcard
+  path: data/external/ulb/creditcard.csv
+  label_column: Class            # 1 = fraud, 0 = legitimate
+  id_column: null                # no ID column; row number is used
+  time_column: Time              # seconds since the first transaction -> split by time
+  features: all_except_label_id_time   # Amount + V1..V28
+  feature_descriptions:
+    Amount: "Transaction amount in EUR"
+    V1: "Anonymized feature (meaning not disclosed)"
+    V2: "Anonymized feature (meaning not disclosed)"
+    V3: "Anonymized feature (meaning not disclosed)"
+    V4: "Anonymized feature (meaning not disclosed)"
+    V5: "Anonymized feature (meaning not disclosed)"
+    V6: "Anonymized feature (meaning not disclosed)"
+    V7: "Anonymized feature (meaning not disclosed)"
+    V8: "Anonymized feature (meaning not disclosed)"
+    V9: "Anonymized feature (meaning not disclosed)"
+    V10: "Anonymized feature (meaning not disclosed)"
+    V11: "Anonymized feature (meaning not disclosed)"
+    V12: "Anonymized feature (meaning not disclosed)"
+    V13: "Anonymized feature (meaning not disclosed)"
+    V14: "Anonymized feature (meaning not disclosed)"
+    V15: "Anonymized feature (meaning not disclosed)"
+    V16: "Anonymized feature (meaning not disclosed)"
+    V17: "Anonymized feature (meaning not disclosed)"
+    V18: "Anonymized feature (meaning not disclosed)"
+    V19: "Anonymized feature (meaning not disclosed)"
+    V20: "Anonymized feature (meaning not disclosed)"
+    V21: "Anonymized feature (meaning not disclosed)"
+    V22: "Anonymized feature (meaning not disclosed)"
+    V23: "Anonymized feature (meaning not disclosed)"
+    V24: "Anonymized feature (meaning not disclosed)"
+    V25: "Anonymized feature (meaning not disclosed)"
+    V26: "Anonymized feature (meaning not disclosed)"
+    V27: "Anonymized feature (meaning not disclosed)"
+    V28: "Anonymized feature (meaning not disclosed)"
+  external_processing_allowed: true
+  publication_allowed: true
+  publication_note: "Approved by the project owner on 2026-11-11 for aggregate results under ODbL/DbCL with attribution to Worldline and ULB MLG (cite Dal Pozzolo et al., 2015). Per-row derived databases may only be shared under ODbL."
+  license_note: "ODbL / DbCL — Worldline and ULB Machine Learning Group. Cite Dal Pozzolo et al., IEEE CIDM 2015."
+split: {train: 0.70, validation: 0.15, holdout: 0.15, seed: 42}
+holdout_sample: null             # score the whole holdout

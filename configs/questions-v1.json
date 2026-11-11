@@ -1,0 +1,12 @@
+{
+  "version": "v1",
+  "task": "F",
+  "id": "fraud_suspected",
+  "question": "Based only on the supplied transaction fields, is this transaction fraudulent rather than legitimate?",
+  "answer": "A score from 0 to 1: the likelihood that the transaction is fraud. Higher means more suspicious.",
+  "note": "Immutable once results are published. Any change needs a new version file.",
+  "criteria": {
+    "true": "The transaction is fraudulent",
+    "false": "The transaction is legitimate"
+  }
+}

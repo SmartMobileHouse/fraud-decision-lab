@@ -1,0 +1,68 @@
+name: Task
+description: One piece of work that fits in at most 3 pull requests.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Writing rules** (they apply to every section):
+        - Use short, plain sentences. Write for a reader who was away for a month.
+        - Explain every project word or codename the first time you use it, or add it to **Words used**.
+        - This issue is a living document. Update **Status**, the **Progress log**, and the **Decision log** as work happens, in the issue body itself.
+        - **Size rule:** if this needs more than 3 pull requests, do not use this form. Open a **Tracking issue** instead.
+  - type: textarea
+    id: what-why
+    attributes:
+      label: What should change, and why
+      description: What a user, operator, or developer gets out of it. Plain words, no solution detail yet.
+      placeholder: "Today X happens. That is a problem because Y. After this change, Z happens instead."
+    validations:
+      required: true
+  - type: textarea
+    id: done-means
+    attributes:
+      label: Done means
+      description: Observable outcomes someone can check. Tick them as they become true.
+      value: |
+        - [ ] …
+        - [ ] Tests cover the change.
+    validations:
+      required: true
+  - type: dropdown
+    id: size
+    attributes:
+      label: Size
+      description: An honest guess. If it grows past 3 pull requests later, convert this into a Tracking issue and say so in the Decision log.
+      options:
+        - Small — one pull request
+        - Medium — 2 to 3 pull requests
+    validations:
+      required: true
+  - type: textarea
+    id: words-used
+    attributes:
+      label: Words used
+      description: One plain-English line for every project word, codename, or abbreviation this issue uses. Delete the section if there are none.
+      placeholder: |
+        - **holdout** — the part of a dataset that is scored once at the end and never used for training or tuning.
+  - type: textarea
+    id: tracking
+    attributes:
+      label: Tracking
+      description: Keep this section up to date in the issue body. It is the single place to see where the work stands.
+      value: |
+        **Status:** Not started
+        <!-- One of: Not started | In progress | In review | Blocked (say on what) | Done -->
+
+        **Pull requests**
+        - [ ] 1 — `type/slug` — one line on what it delivers
+
+        **Progress log** (one line per working session, newest last)
+        - YYYY-MM-DD — …
+
+        **Decision log** (add a row the day a decision is made; never rewrite old rows)
+
+        | Date | Decision | Why |
+        |------|----------|-----|
+    validations:
+      required: true
