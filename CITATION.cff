@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this benchmark or its results, please cite it as below."
+title: "Fraud Decision Lab: a reproducible benchmark of AI decision models vs XGBoost for payment-fraud ranking"
+type: software
+authors:
+  - given-names: Jerzy
+    family-names: Pietruszewski
+    affiliation: Smart Mobile House
+version: 0.2.0
+date-released: 2026-11-11
+license: MIT
+repository-code: "https://github.com/SmartMobileHouse/fraud-decision-lab"
+url: "https://smartmobilehouse.com/research/fraud-decision-lab/"
+keywords:
+  - fraud detection
+  - benchmark
+  - xgboost
+  - large language models
+  - decision models
+preferred-citation:
+  type: report
+  title: "We tested 5 AI models against XGBoost for fraud detection. Here's what they caught (report version 1.0)"
+  authors:
+    - given-names: Jerzy
+      family-names: Pietruszewski
+      affiliation: Smart Mobile House
+  institution:
+    name: Smart Mobile House
+  year: 2026
+  month: 11
+  url: "https://smartmobilehouse.com/research/fraud-decision-lab/"
