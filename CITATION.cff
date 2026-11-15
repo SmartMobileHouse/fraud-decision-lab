@@ -9,6 +9,7 @@ authors:
 version: 0.2.0
 date-released: 2026-11-11
 license: MIT
+doi: 10.5281/zenodo.24246952
 repository-code: "https://github.com/SmartMobileHouse/fraud-decision-lab"
 url: "https://smartmobilehouse.com/research/fraud-decision-lab/"
 keywords:

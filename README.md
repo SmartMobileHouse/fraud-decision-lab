@@ -1,5 +1,7 @@
 # fraud-decision-lab
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24246952.svg)](https://doi.org/10.5281/zenodo.24246952)
+
 A vendor-neutral research **benchmark of specialized AI decision models
 versus conventional machine learning** for **payment-fraud ranking**. It sends
 the same transactions to **TypeSafe Jev**, **OpenAI Decisions**, **Cloudflare
@@ -145,6 +147,8 @@ run by default. See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Results
 
+The published results are in the report: [We tested 5 AI models against XGBoost for fraud detection (report v1.0)](https://smartmobilehouse.com/research/fraud-decision-lab/).
+
 The current source distribution contains no benchmark result files. Older Git
 history contains results text and screenshots, so changing the original private
 repository's visibility is **not** a source-only release. See
@@ -196,6 +200,35 @@ prediction evidence and provenance.
   a bit-for-bit frozen image recipe.
 - This is an independent project and is not affiliated with or endorsed by
   TypeSafe, OpenAI, Cloudflare, Kaggle or the dataset owners.
+
+## How to cite
+
+If you use this benchmark or its results, please cite the report:
+
+> Pietruszewski, J. (2026). *We tested 5 AI models against XGBoost for fraud detection. Here's what they caught* (report version 1.0). Smart Mobile House. https://smartmobilehouse.com/research/fraud-decision-lab/
+
+The code is archived on Zenodo: [doi:10.5281/zenodo.24246952](https://doi.org/10.5281/zenodo.24246952) (all versions). GitHub's **Cite this repository** button gives APA and BibTeX.
+
+```bibtex
+@techreport{pietruszewski2026frauddecisionlab,
+  author      = {Pietruszewski, Jerzy},
+  title       = {We tested 5 AI models against XGBoost for fraud detection. Here's what they caught},
+  institution = {Smart Mobile House},
+  year        = {2026},
+  type        = {Report},
+  number      = {version 1.0},
+  url         = {https://smartmobilehouse.com/research/fraud-decision-lab/}
+}
+
+@software{pietruszewski2026frauddecisionlab_code,
+  author    = {Pietruszewski, Jerzy},
+  title     = {Fraud Decision Lab: a reproducible benchmark of AI decision models vs XGBoost for payment-fraud ranking},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.24246952},
+  url       = {https://github.com/SmartMobileHouse/fraud-decision-lab}
+}
+```
 
 ## License
 
