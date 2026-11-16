@@ -1,22 +1,53 @@
-# fraud-decision-lab
+<p align="center">
+  <a href="https://smartmobilehouse.com">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/SmartMobileHouse/.github/main/profile/assets/smh-mark-light.svg">
+      <img src="https://raw.githubusercontent.com/SmartMobileHouse/.github/main/profile/assets/smh-mark-dark.svg" alt="Smart Mobile House" height="56">
+    </picture>
+  </a>
+</p>
+<h1 align="center">Fraud Decision Lab</h1>
+<p align="center">
+  <strong>An open, reproducible benchmark of AI decision APIs against XGBoost for payment-fraud triage.</strong><br>
+  In the first 100 reviews of 10,000 synthetic transactions, XGBoost found 84 frauds; the best AI approach found 57.
+</p>
 
+<div align="center">
+
+[![License](https://img.shields.io/github/license/SmartMobileHouse/fraud-decision-lab)](LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24246952.svg)](https://doi.org/10.5281/zenodo.24246952)
+[![Smart Mobile House](https://img.shields.io/badge/built%20by-Smart%20Mobile%20House-1F3A38)](https://smartmobilehouse.com)
 
-A vendor-neutral research **benchmark of specialized AI decision models
-versus conventional machine learning** for **payment-fraud ranking**. It sends
-the same transactions to **TypeSafe Jev**, **OpenAI Decisions**, **Cloudflare
-Clef / Clef-flash** and a structured-output LLM, then measures **how much
-labelled fraud each one ranks into the top of an analyst's review queue**, against an
-**XGBoost** baseline, at what **cost** and **latency**.
+</div>
 
-Fraud teams can review only a small share of transactions. The useful
-question is not "is this model clever?" but "if analysts can review only the
-top 1%, whose ranking catches the most fraud, and what does it cost?" This lab
-explores that on configured labelled tabular datasets. It runs offline by
-default and saves predictions and experiment metadata for local verification.
+<p align="center">
+  <a href="https://smartmobilehouse.com/research/fraud-decision-lab/"><img src="docs/results-first-100-reviews.png" alt="Frauds found in the first 100 cases reviewed: XGBoost 84, rules checklist 74, general LLM 57, Cloudflare Clef 51, OpenAI Decisions 33, TypeSafe Jev 22, Clef-flash 16" width="720"></a>
+</p>
 
-> Built and maintained by [Smart Mobile House](https://smartmobilehouse.com) —
-> secure AI implementation for enterprise.
+## Results
+
+Report v1.0 (runs of 6 November 2026). Full write-up with charts and confidence intervals: [We tested 5 AI models against XGBoost for fraud detection](https://smartmobilehouse.com/research/fraud-decision-lab/).
+
+| Measure | XGBoost | Rules checklist | Best AI approach | Decision APIs |
+| :--- | :--- | :--- | :--- | :--- |
+| Frauds in the first 100 reviews (synthetic, 310 frauds in 10,000) | 84 | 74 | 57 (general LLM) | 16–51 |
+| Share of fraud in the top 1% (ULB card data, 52 frauds) | 82.7% | — | 46.2% | — |
+| Median latency | local | local | — | 175–324 ms |
+| Cost per 1,000 synthetic transactions | local | local | — | $0.016–$0.10 |
+
+XGBoost learned from labelled history; the AI approaches ran zero-shot. The synthetic labels share risk factors with the rules, which flatters the rules. See [Notes & limitations](#notes--limitations).
+
+The current source distribution contains no benchmark result files. Older Git
+history contains results text and screenshots, so changing the original private
+repository's visibility is **not** a source-only release. See
+[`RELEASE.md`](RELEASE.md) for a reviewable source snapshot without that history.
+
+Run `make demo` for a synthetic offline example. `fraudlab report` and
+`fraudlab export-report-data` require a dataset approved for publication; they
+do not make a legal determination. Results from unapproved datasets remain local
+run artifacts. A source-only release does not provide public Level 3 verification
+of historical paid experiments. Retained research claims need separately reviewed
+prediction evidence and provenance.
 
 ## What it compares
 
@@ -130,6 +161,17 @@ config allows publishing aggregate results under its ODbL/DbCL licence with
 attribution (see [`DATA_LICENSES.md`](DATA_LICENSES.md)). Do not enable publication
 merely to bypass a report refusal.
 
+## Status
+
+- [x] Offline demo on bundled synthetic data (`make demo`, no keys, about 5 seconds)
+- [x] XGBoost and rules baselines
+- [x] Adapters for TypeSafe Jev, OpenAI Decisions, Cloudflare Clef / Clef-flash and a structured-output LLM
+- [x] Review-queue metrics (top 1% / 5%, PR-AUC) with paired bootstrap ranges
+- [x] Spending guard for live runs (`--allow-external-requests`, `--max-cost-usd`)
+- [x] Costs from recorded token usage and a dated price snapshot
+- [x] `fraudlab replay` for saved run metrics
+- [x] Per-dataset processing and publication gates
+- [x] Docker / Podman image that runs without network
 
 ## Development
 
@@ -144,22 +186,6 @@ make help       # list all targets
 There is no hosted CI: run `make check` before every push. Tests can never
 reach the network; tests that call a real paid API are marked `live` and never
 run by default. See [`CONTRIBUTING.md`](CONTRIBUTING.md).
-
-## Results
-
-The published results are in the report: [We tested 5 AI models against XGBoost for fraud detection (report v1.0)](https://smartmobilehouse.com/research/fraud-decision-lab/).
-
-The current source distribution contains no benchmark result files. Older Git
-history contains results text and screenshots, so changing the original private
-repository's visibility is **not** a source-only release. See
-[`RELEASE.md`](RELEASE.md) for a reviewable source snapshot without that history.
-
-Run `make demo` for a synthetic offline example. `fraudlab report` and
-`fraudlab export-report-data` require a dataset approved for publication; they
-do not make a legal determination. Results from unapproved datasets remain local
-run artifacts. A source-only release does not provide public Level 3 verification
-of historical paid experiments. Retained research claims need separately reviewed
-prediction evidence and provenance.
 
 ## Notes & limitations
 
@@ -230,9 +256,31 @@ The code is archived on Zenodo: [doi:10.5281/zenodo.24246952](https://doi.org/10
 }
 ```
 
+## Contributing
+
+Issues and pull requests are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md). Report security issues as described in [SECURITY.md](SECURITY.md).
+
+## Why Fraud Decision Lab?
+
+### Fraud teams can review only a small share of transactions
+
+The useful measure is how much fraud lands in the slice analysts can actually review, for example the top 1% of a queue, and what each model costs to get there.
+
+### Vendor claims are hard to compare
+
+- Decision-model APIs launched in 2026 are pitched for fraud triage with "no training needed".
+- Published comparisons rarely use the same transactions, the same fields and the same review budget, and few can be rerun.
+
+### This lab measures them side by side
+
+- The same transactions and the same configured feature schema for every model; input differences are documented.
+- Metrics tied to review capacity, with bootstrap ranges.
+- Offline by default; live calls are opt-in and cost-guarded.
+- Every run saves predictions, metadata and costs, so results can be checked.
+
 ## License
 
-[MIT](LICENSE) © Smart Mobile House
+[MIT](LICENSE) © Smart Mobile House. Built and maintained by [Smart Mobile House](https://smartmobilehouse.com).
 
 The Smart Mobile House name is a trademark of Smart Mobile House and is not
 licensed under MIT. Generated reports remain subject to dataset, provider and
